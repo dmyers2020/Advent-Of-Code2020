@@ -30,7 +30,7 @@ print("Part One : "+ str(valid_pass))
 # in part two, the min/max are actually positions, where the letter most occur in one OR the other; not both.
 
 for i  in range(len(input)):
-    if len(input[i][0].split('-'))>2:
+    if len(input[i][0].split('-'))>2:   
         print(position)
 
 valid_pass2 = 0 #keep a count of valid passwords
