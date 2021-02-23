@@ -3,7 +3,7 @@
 # Date = December 2020
 
 with open((__file__.rstrip("code.py")+"sample_input.txt"), 'r') as input_file:
-    input = input_file.read()
+    data = input_file.read().split(".\n")
 '''
 initial thoughts: taking a peek at the input tells shows that there's a lot more than just the 9 example rules they provided.
 i'm thinking I need to:
@@ -29,12 +29,53 @@ i'm thinking I need to:
   - rule pattern: 'color_mod color useless [qty, no] color_mod color, [[qty, no] color_mod color]
 
 '''
-input =input.split('\n')
+import re
+## create a dictionary
+bags_dict = {} #initialize the dictionary
+for bag in data: #populate the dcitionary
+    bag = bag.replace(" bags", "").replace(" bag", "").replace(".", "") #remove irrelevant text
+    bag = bag.split(" contain ") #split each entry into parent and child
+    bags_dict[bag[0]] = [bag[1]] #populate the dictionary Key: parent, value: child
 
-print(input)
+for key, value in bags_dict.items():
+	bags_dict[key] = value[0].split(', ')  #split the values into a list by comma
 
-print("Part One : "+ str(None))
+def bag_check(bags_dict, bag, bags_holding_gold, iterations):
+    '''
+    takes in a dict and a bag (key)
+    checks the items associated with that key.
+    recurses until the key has no items; or contains a 'shiny gold'
+    returns the list of bags which can eventually contain a 'shiny gold'  
+    '''
+##    print(bag)
+    none_check = bags_dict.get(bag)
+    if none_check is not None and iterations<1000 : #catch none types and inf loops
+        for item in bags_dict.get(bag): #check each item in that bag
+            item = re.sub("\d+ ", "", item) #drop the number and the space
+            
+            if item in bags_holding_gold:
+                bags_holding_gold.append(key) #this bag holds a bag which can hold shiny gold
+                print(item, key)
+            if 'shiny gold' in item:  #if any of the items are a shiny gold bag note the bag its held by
+##                print(key, bag, item, bags_holding_gold)
+                bags_holding_gold.append(bag)
+            bag_check(bags_dict, item, bags_holding_gold, iterations) #recursively check to see if an item in the bag could hold a shiny gold
+        iterations +=1
+    return(bags_holding_gold)
+        
 
+bags_holding_gold =[]
+for key in bags_dict.keys(): #check each bag in the in the dictionary  
+   ##    print(key)
+    bag_check(bags_dict, key, bags_holding_gold,0) #i'm not sure what this will do
 
+bags_holding_gold= set(bags_holding_gold)
 
-print("Part Two : "+ str(None))
+print(len(bags_holding_gold))
+print(bags_holding_gold)
+
+# print("Part One : "+ str(None))
+#
+#
+#
+# print("Part Two : "+ str(None))
