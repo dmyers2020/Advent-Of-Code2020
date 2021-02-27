@@ -29,71 +29,17 @@ i'm thinking I need to:
   - rule pattern: 'color_mod color useless [qty, no] color_mod color, [[qty, no] color_mod color]
 
 '''
-
-import collections
-'''
-initialize a class to explore DFS
-'''
-class Tree_Node:
-    def __init__(self,root_value,children_nodes):
-        self.value = root_value
-        self.children = children_nodes
-'''
-Breadth First Search function
-takes in a Root_Node
-traverses the children of that root according to 
-the BFS algo
-'''
-def bfs(Root_Node):
-    '''
-dequeue() [DOUBLY ENDED QUEUE] is like a list indexed in both directions; which
-makes it easier to add/delete values because you can traverse the list from either direction
-append() appendleft() pop() popleft()
-***note***  pop - does what it says; it pops the value out, so you can USE it (assign to a var
-'''    
-    queue = collections.deque() #create an empty doubly ended queue
-    queue.append(Root_Node.value) # add the input to the function to the queue
-    
-    while queue: #while the list is not empty (we're gonna be popping)
-        node_value = queue.popleft() #set the node_value as the first entry in the queue
-        print(node_value)
-        children_nodes = bags_dic[node_value]
-        
-        for i in children_nodes:
-            if i == None or 'no other': #if your at a leaf (a node that has no children)
-##                print(i + ' no other?')
-                continue #don't throw an error - instead; just run again
-            queue.append(i)
-        
-
-'''
-create the tree as a dictionary for our algo to traverse
-'''
 import re
-
 ## create a dictionary
-bags_dic = {} #initialize the dictionary
+bags_dict = {} #initialize the dictionary
 for bag in data: #populate the dcitionary
     bag = bag.replace(" bags", "").replace(" bag", "").replace(".", "") #remove irrelevant text
     bag = bag.split(" contain ") #split each entry into parent and child
-    bags_dic[bag[0]] = [bag[1]] #populate the dictionary Key: parent, value: child
+    bags_dict[bag[0]] = [bag[1]] #populate the dictionary Key: parent, value: child
 
-for key, value in bags_dic.items():
-    bags_dic[key] = value[0].split(', ')  #split the values into a list by comma
-    for i in range(len(bags_dic.get(key))): #for all the values of this key
-        bags_dic.get(key)[i] = re.sub("\d+ ", "", bags_dic.get(key)[i]) #drop the quantities
-##        print(bags_dic.get(key)[i])
-'''
-create an object of the root node class 
-initialize it with the first item in the dictionary
-'''
-root_node_value = next(iter(bags_dic.keys())) #iterate thru the dictionary keys
-root_node_children = next(iter(bags_dic.values())) #iterate through the values
-root_node = Tree_Node(root_node_value,root_node_children) #create a roote node object using the key:value pair
+for key, value in bags_dict.items():
+	bags_dict[key] = value[0].split(', ')  #split the values into a list by comma
 
-bfs(root_node)
-
-"""
 def bag_check(bags_dict, bag, bags_holding_gold, iterations):
     '''
     takes in a dict and a bag (key)
@@ -128,9 +74,8 @@ bag_check(bags_dict, 1, bags_holding_gold,0) #i'm not sure what this will do
 print(len(bags_holding_gold))
 print(bags_holding_gold)
 
- print("Part One : "+ str(None))
-
-
-
- print("Part Two : "+ str(None))
-"""
+# print("Part One : "+ str(None))
+#
+#
+#
+# print("Part Two : "+ str(None))
